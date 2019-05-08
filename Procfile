@@ -1,1 +1,1 @@
-'work : python bot.py' 
+'clock : python bot.py' 
