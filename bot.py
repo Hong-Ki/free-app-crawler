@@ -7,9 +7,6 @@ dir(telegram)
 bot_token = os.getenv('BOT_TOKEN')
 
 sched = BlockingScheduler()
-if bot_token == None:
-    bot_token = '695803293:AAG5FyA1ptFScX6E1ZGtOL4n2aj7CiuLkZM'
-    bot = telegram.Bot(token=bot_token)
 
 
 @sched.scheduled_job('interval', minutes=25)
