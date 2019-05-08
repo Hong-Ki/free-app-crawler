@@ -1,41 +1,36 @@
 import requests
 from bs4 import BeautifulSoup
 
-req = requests.get('http://bbs.ruliweb.com/market/board/1020/list?search_type=member_srl&search_key=5046042')
-html = req.text
-soup = BeautifulSoup(html, 'html.parser')
-elements = soup.select(
-  'tr.table_body:not(.notice)'
-)[:2]
 
-arr = []
+def getPlatforms():
+    req = requests.get(
+        'http://bbs.ruliweb.com/market/board/1020/list?search_type=member_srl&search_key=5046042')
+    html = req.text
+    soup = BeautifulSoup(html, 'html.parser')
+    elements = soup.select(
+        'tr.table_body:not(.notice)'
+    )[:2]
+    results = []
+    for element in elements:
+        platform = {
+            'title': element.select('.subject a ')[0].text,
+            'link': element.select('.subject a ')[0].get('href'),
+            'time': element.select('.time')[0].text.strip(),
+        }
+        results.append(platform)
 
-for element in elements:
-  obj = {
-    'title' : element.select('.subject a ')[0].text,
-    'link': element.select('.subject a ')[0].get('href'),
-    'time': element.select('.time')[0].text.strip(),
-  }
-  arr.append(obj)
-                                            
-#print(arr)
-for obj in arr:
-  req = requests.get(obj['link'])
-  html = req.text
-  soup = BeautifulSoup(html, 'html.parser')
+    return results
 
-  links = soup.select('div.board_main_view a')
-  links = list(filter(lambda link: ('play.google.com' in link.get('href')) | ('itunes.apple.com' in link.get('href')) , links))
 
-  print('---LINKS')
-  print(links)
-  print('---LINKS END')
+def getAppLinks(link):
+    req = requests.get(link)
+    html = req.text
+    soup = BeautifulSoup(html, 'html.parser')
 
-  arr2= []
-  for i in range( len(links) ):
-    app = {
-      'link': links[i].get('href')
-    }
+    links = soup.select('div.board_main_view a')
+    links = list(filter(
+        lambda link: ('play.google.com' in link.get('href')) | ('itunes.apple.com' in link.get('href')), links)
+    )
+    links = list(map(lambda link: link.get('href'), links))
 
-    arr2.append(app)
-  print(arr2)
+    return links
