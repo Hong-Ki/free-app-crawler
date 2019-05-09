@@ -22,15 +22,20 @@ def getPlatforms():
     return results
 
 
-def getAppLinks(link):
+def getAppInfo(link):
     req = requests.get(link)
     html = req.text
     soup = BeautifulSoup(html, 'html.parser')
 
-    links = soup.select('div.board_main_view a')
     links = list(filter(
-        lambda link: ('play.google.com' in link.get('href')) | ('itunes.apple.com' in link.get('href')), links)
-    )
-    links = list(map(lambda link: link.get('href'), links))
+        lambda link: ('play.google.com' in link.get('href'))
+        | ('itunes.apple.com' in link.get('href')), soup.select('div.board_main_view a')
+    ))
+    links = list(map(
+        lambda link: link.get('href'), links
+    ))
 
-    return links
+    titles = soup.select('div.board_main_view h3')
+    titles = list(map(lambda title: title.text.replace('\xa0', ''), titles))
+
+    return {'links': links, 'titles': titles, 'length': len(links)}
