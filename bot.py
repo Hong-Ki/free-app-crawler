@@ -26,9 +26,9 @@ def sendMessage():
         current.append(platform['title'])
 
 
-@sched.scheduled_job('interval', seconds=5)
-# @sched.scheduled_job('interval', minutes=25)
+@sched.scheduled_job('interval', minutes=25)
 def timed_job():
+    print('CHECK')
     if (len(current) < 2):
         sendMessage()
 
@@ -36,6 +36,7 @@ def timed_job():
 @sched.scheduled_job('cron', hour=8)
 def scheduled_job():
     current.clear()
+    print('SEND_MESSAGE')
     sendMessage()
 
 
