@@ -4,6 +4,7 @@ import os
 import telegram
 dir(telegram)
 
+print('INIT')
 bot_token = os.getenv('BOT_TOKEN')
 sched = BlockingScheduler()
 bot = telegram.Bot(token=bot_token)

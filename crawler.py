@@ -35,7 +35,10 @@ def getAppInfo(link):
         lambda link: link.get('href'), links
     ))
 
-    titles = soup.select('div.board_main_view h3')
+    for i in range(1, 7):
+        titles = soup.select('div.board_main_view h' + str(i))
+        if titles:
+            break
     titles = list(map(lambda title: title.text.replace('\xa0', ''), titles))
 
     return {'links': links, 'titles': titles, 'length': len(links)}
