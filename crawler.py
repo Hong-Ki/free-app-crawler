@@ -39,6 +39,8 @@ def getAppInfo(link):
         titles = soup.select('div.board_main_view h' + str(i))
         if titles:
             break
+    if not titles:
+        titles = soup.select('hr + p')
     titles = list(map(lambda title: title.text.replace('\xa0', ''), titles))
 
     return {'links': links, 'titles': titles, 'length': len(links)}

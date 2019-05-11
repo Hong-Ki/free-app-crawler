@@ -16,13 +16,17 @@ def sendMessage():
     message = ''
     platforms = getPlatforms()
 
+    print(platforms)
     for platform in platforms:
         if len(platform['time']) > 9:
             continue
         message = platform['title']+'\n'+platform['link']+'\n\n'
         apps = getAppInfo(platform['link'])
+        print(apps)
         for i in range(apps['length']):
-            message += '-' + apps['titles'][i] + '\n' + apps['links'][i] + '\n'
+            if apps['titles']:
+                message += '-'+apps['titles'][i] + '\n'
+            message += apps['links'][i] + '\n'
         result = bot.sendMessage(chat_id='-1001166284442', text=message)
         current.append(platform['title'])
 
